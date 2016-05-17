@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        var cwidht=400;
+        var cheight=300;
+        var dx=50;
+        var dy=50;
+        var dicewidth=100;
+        var diceheight=100;
+        var dotrad=6;
+        var ctx;
+        var dicex;
+        var dicey;
+        var point;
+        var firstturn=true;
+        function init(){
+            var sum;
+            var n=Math.floor(Math.random()*6)+1;
+            sum=n;
+            dicex=dx;
+            dicey=dy;
+            drawface(n);
+            n=Math.floor(Math.random()*6)+1;
+            sum=sum+n;
+            dicex=150+dx;
+            drawface(n);
+            if(firstturn==true){
+                switch (sum){
+                    case 7:
+                    case 11:document.f.out.value="you win";break;
+                    case 2:
+                    case 3:
+                    case 12:document.f.outcome.value="you lose";break;
+                    default:
+                    point=sum;
+                    document.f.stage.value="throw again";
+                    document.f.pv.value=point;
+                    firstturn=false;
+                    document.f.outcome.value="";
+                }
+            }
+            else{
+                switch (sum){
+                    case point:document.f.outcome.value="you win";
+                        document.f.stage.value="back to first throw";
+                        document.f.pv.value="";
+                        firstturn=true;
+                        break;
+                    case 7:
+                        document.f.outcome.value="you lose";
+                        document.f.stage.value="back to first throw";
+                        document.f.pv.value="";
+                        firstturn=true;
+                        break;
+
+
+                }
+            }
+        }
+        function drawface(n){
+            ctx=document.getElementById("Canvas").getContext("2d");
+            ctx.lineWidth=5;
+            ctx.fillStyle="#009966";
+            ctx.clearRect( dicex,dicey ,dicewidth,diceheight);
+            ctx.strokeRect(dicex,dicey,dicewidth,diceheight);
+
+            switch (n){
+                case 1:draw1();break;
+                case 2:draw2();break;
+                case 3:draw2();draw1();break;
+                case 4:draw4();break;
+                case 5:draw4(),draw1();break;
+                case 6:draw4();draw2mid();break;
+            }
+        }
+        function draw1(){
+            var dotx;
+            var doty;
+            dotx=dicewidth*0.5+dicex;
+            doty=diceheight*0.5+dicey;
+            ctx.beginPath();
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            ctx.closePath();
+            ctx.fill();
+        }
+        function draw2(){
+            var dotx;
+            var doty;
+            ctx.beginPath();
+            dotx=dotrad*3+dicex;
+            doty=dotrad*3+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            dotx=dicewidth-dotrad*3+dicex;
+            doty=diceheight-dotrad*3+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            ctx.closePath();
+            ctx.fill();
+        }
+        function draw4(){
+            var dotx;
+            var doty;
+            ctx.beginPath();
+            dotx=dotrad*3+dicex;
+            doty=dotrad*3+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            dotx=dicewidth-dotrad*3+dicex;
+            doty=dotrad*3+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            ctx.closePath();
+            ctx.fill();
+            ctx.beginPath();
+            dotx=dotrad*3+dicex;
+            doty=diceheight-dotrad*3+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            dotx=dicewidth-dotrad*3+dicex;
+            doty=diceheight-dotrad*3+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            ctx.closePath();
+            ctx.fill();
+        }
+        function draw2mid(){
+            var dotx;
+            var doty;
+            ctx.beginPath();
+            dotx=dotrad*3+dicex;
+            doty=diceheight*0.5+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            dotx=dicewidth-dotrad*3+dicex;
+            doty=diceheight*0.5+dicey;
+            ctx.arc(dotx,doty,dotrad,0,Math.PI*2,true);
+            ctx.closePath();
+            ctx.fill();
+        }
+    </script>
+</head>
+<body>
+<canvas id="Canvas" width="400" height="300">
+    wufaxianshi
+</canvas>
+
+<button onclick="init();">Throw dice</button>
+<br/><br/>
+<form name="f" onsubmit="thorwdice()">
+    Stage:<input type="text" name="stage" value="First Throw"/>
+    Point:<input type="text" name="pv" value=" "/>
+    Outcome:<input type="text" name="outcome" value=" "/>
+    <input type="submit" value="THROW DICE"/>
+</form>
+
+</body>
+</html>
